@@ -1,3 +1,36 @@
+/*
+Closest pair of points problem
+Description
+
+給定平面上n個點，找其中的一對點，使得在n個點的所有點對中，該點對的距離最小
+
+
+Input
+第一行為一正整數字n，代表點的個數，第二行開始依序為每個點的座標Xi與Yi。
+
+2≦n≦1000000
+
+-10000≦Xi≦10000
+
+-10000≦Yi≦10000
+
+
+Output
+兩個距離最近的點之間距離為多少，輸出至小數點後3位
+
+
+Sample Input 1 
+
+4
+-2 3
+9 10
+-1 -2
+8 4
+Sample Output 1
+
+5.099
+*/
+--------------------------------code-----------------------------------
 #include <bits/stdc++.h>
 using namespace std;
 struct locate
@@ -114,29 +147,4 @@ int main()
     float ans = pow(dc(0,node.size()-1),0.5);
     cout<< fixed <<setprecision(3)<<ans<<endl;
 }
-/*
-4
--2 3
-9 10
--1 -2
-8 4
 
-10
--9 -20
--9 -10
--9 0
--9 10
-0 1
-1 1
-9 -20
-9 -10
-9 0
-9 10
-
-5
-0 1
-0 2
-0 5
-0 10
-0 20
-*/
