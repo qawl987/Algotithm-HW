@@ -1,0 +1,142 @@
+#include <bits/stdc++.h>
+using namespace std;
+struct locate
+{
+    int x,y;
+};
+vector<locate > node;
+locate node_y[1000000];
+bool cmp(locate a,locate b)
+{
+    if(a.x<b.x)return true;
+    else if(a.x==b.x)
+    {
+        if(a.y<b.y)
+            return true;
+        else return false;
+    }
+    else return false;
+}
+/*
+以y軸高度由低到高排序
+*/
+void sort_y(int l,int r) 
+{
+    int mid=(l+r)/2;
+    locate tmp[1000000];
+    for(int i=l;i<=r;i++)
+    {
+        tmp[i-l]=node_y[i];
+    }
+    int k=l;
+    int i=l,j=mid+1;
+    for(;i<=mid&&j<=r;k++)
+    {
+        if(tmp[i-l].y<=tmp[j-l].y)
+        {
+            node_y[k]=tmp[i-l];
+            i++;
+        }
+        else
+        {
+            node_y[k]=tmp[j-l];
+            j++;
+        }
+    }
+    for(;i<=mid;i++,k++)
+        node_y[k]=tmp[i-l];
+    for(;j<=r;j++,k++)
+        node_y[k]=tmp[j-l];
+}
+/*
+計算以左右最小距離值d所畫出來的區域中是否有更小的d
+*/
+int cnt_middle(int l,int r,int d)
+{
+    int mid=(l+r)/2;
+    float dis=pow(d,0.5);
+    float x_l=node[mid].x-dis;
+    float x_r=node[mid].x+dis;
+    int smaller=1e9;
+    locate q[4];
+    int tmp=0;
+    int x=0;
+    for(int i=l;i<=r;i++)
+    {
+        if((float)node_y[i].x>=x_l&&(float)node_y[i].x<=x_r)
+        {
+            q[(x++)%4]=node_y[i];       //把在x範圍內的點放進q
+            if(tmp<4)tmp++;     //以tmp控制目前要計算幾個點
+            for(int j=0;j<tmp;j++)
+            {
+                for(int k=j+1;k<tmp;k++)
+                {
+                    smaller=min(smaller,(q[k].x-q[j].x)*(q[k].x-q[j].x)+(q[k].y-q[j].y)*(q[k].y-q[j].y));
+                }
+            }
+        }
+    }
+    return smaller;
+}
+int dc(int l,int r)
+{
+    //剩兩點時排序的同時回傳距離
+    if(r-l==1)
+    {
+        if(node[l].y<=node[r].y){node_y[l]=node[l];node_y[r]=node[r];}
+        else {node_y[l]=node[r];node_y[r]=node[l];}
+        return (node[r].x-node[l].x)*(node[r].x-node[l].x)+(node[r].y-node[l].y)*(node[r].y-node[l].y);
+    }
+    else if(r==l)return 1e9;
+    int mid=(l+r)/2;
+    int dl=dc(l,mid);       //dc(左)
+    int dr=dc(mid+1,r);     //dc(右)
+    int d=min(dl,dr);       //取左右最小值
+    sort_y(l,r);        //按照Y座標排序
+    int middle=cnt_middle(l,r,d);       //以中點X座標+d,-d為基準在範圍內的點以y座標排序往下找
+    d = min(d,middle);
+    return d;
+}
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    int n;
+    cin>>n;
+    for(int i=0;i<n;i++)
+    {
+        int x,y;
+        cin>>x>>y;
+        node.push_back({x,y});
+    }
+    sort(node.begin(),node.end(),cmp);
+    for(int i=0;i<n;i++)node_y[i]=node[i];
+    float ans = pow(dc(0,node.size()-1),0.5);
+    cout<< fixed <<setprecision(3)<<ans<<endl;
+}
+/*
+4
+-2 3
+9 10
+-1 -2
+8 4
+
+10
+-9 -20
+-9 -10
+-9 0
+-9 10
+0 1
+1 1
+9 -20
+9 -10
+9 0
+9 10
+
+5
+0 1
+0 2
+0 5
+0 10
+0 20
+*/
