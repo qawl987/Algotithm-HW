@@ -198,6 +198,7 @@ int main()
 //11+44*77-88+44
 //78154*24+58-89+91
 //78*536-153+4531*1285+45-45*8
+//1-2*3+4*5-6
 ``` 
 - input output
 - <img width="117" alt="螢幕擷取畫面 2022-04-07 191745" src="https://user-images.githubusercontent.com/62208230/162187193-c825eda1-477b-47f5-9ba5-3fce802a75c0.png">
