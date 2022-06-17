@@ -10,12 +10,14 @@ int currentPathC[maxnode];
 int cnt=0;
 int bfs(int sNode, int eNode)//breadth first search
 {
-   // 每次要bfs都先清空parent 跟 目前這個點的
+   // 每次要bfs都先清空parent 跟 目前這個點的 path flow
    memset(parList, -1, sizeof(parList));
    memset(currentPathC, 0, sizeof(currentPathC));
    queue<int> q;//declare queue vector
    q.push(sNode);
+   //其實有沒有設原點為0不重要
    parList[sNode] = -1;//initialize parlist’s source node
+   //把起始點流通量設最大
    currentPathC[sNode] = 999;//initialize currentpath’s source node
    while(!q.empty())// if q is not empty
    {
@@ -26,6 +28,7 @@ int bfs(int sNode, int eNode)//breadth first search
          int to = g[currNode][i];
          if(parList[to] == -1)
          {
+            flowPassed有可能為負的，所以透過flowPassed代表
             if(c[currNode][to] - flowPassed[currNode][to] > 0)
             {
                parList[to] = currNode;
@@ -93,3 +96,4 @@ int main()
    system("pause");
 }
 ```
+- 困難點在於比如
